@@ -12,7 +12,7 @@ console.log(NEWS_API_KEY);
 
 const articleCache = {};
 const articleTimestamps = {};
-const CACHE_DURATION = 5 * 60 * 1000; 
+const CACHE_DURATION = 10 * 60 * 1000; 
 let headlinesCache = null;
 let headlinesTimestamp = 0;
 
@@ -48,7 +48,12 @@ const getLatestArticles = async (req, res) => {
       news: response.data,
     });
   } catch (error) {
-    console.error("Error:", error.message);
+    console.error("Error fetching from NewsAPI:", error.response?.data || error.message);
+
+res.status(500).json({
+  success: false,
+  message: error.response?.data?.message || error.message || "Something went wrong",
+});
   if (articleCache[key]) {
     return res.json({
       success: true,

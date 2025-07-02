@@ -52,7 +52,7 @@ const ImageSlider = () => {
   };
 
   return (
-    <div className="relative w-full aspect-[16/6] overflow-hidden my-10 mx-auto rounded-xl shadow-xl mt-16">
+    <div className="relative w-full aspect-[16/9] sm:aspect-[16/6] overflow-hidden my-0 sm:my-10 mx-auto rounded-xl shadow-xl mt-24 sm:mt-16">
       {/* Subtle left gradient overlay */}
       <div className="absolute top-0 left-0 h-full w-full z-10 pointer-events-none bg-gradient-to-r from-black/40 via-black/20 to-transparent"></div>
 
@@ -65,26 +65,27 @@ const ImageSlider = () => {
           <div
             key={i}
             className="w-full h-full flex-shrink-0 bg-cover bg-center relative"
-            style={{ backgroundImage: `url(${item?.urlToImage || ""})` }}
+            style={{ backgroundImage: `url(${item?.urlToImage || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuQ47TIibvopJASv2XW9vYdGhNy4BVj8o6MA&s"})` }}
             onClick={() => {
-  navigate("/article", {
-    state: {
-      image: item?.urlToImage,
-      title: item?.title,
-      author: item?.author,
-      description: item?.description,
-      url: item?.url,
-      source: item?.source.name,
-      content: item?.content,
-      publishedAt: item?.publishedAt,
-    },
-  });
-}}
-
+              navigate("/article", {
+                state: {
+                  image: item?.urlToImage,
+                  title: item?.title,
+                  author: item?.author,
+                  description: item?.description,
+                  url: item?.url,
+                  source: item?.source.name,
+                  content: item?.content,
+                  publishedAt: item?.publishedAt,
+                },
+              });
+            }}
           >
             <div className="absolute inset-0 flex items-end justify-start p-4 sm:p-6 md:p-10 bg-black/20 px-4 py-2 rounded">
               <h2 className="text-white text-lg sm:text-xl md:text-3xl font-semibold drop-shadow-xl ">
-                {item?.title}
+                {item?.title.length > 100
+                  ? `${item?.title.slice(0, 100)}...`
+                  : item?.title}
               </h2>
             </div>
           </div>

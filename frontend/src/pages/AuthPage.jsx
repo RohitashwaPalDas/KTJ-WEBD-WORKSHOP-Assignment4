@@ -3,6 +3,7 @@ import Title from "../components/Title";
 import axios from 'axios'
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import {toast} from 'react-toastify'
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -32,15 +33,22 @@ const AuthPage = () => {
       if (isSignup) {
         const res = await axios.post(backendUrl + "/api/user/register", {formData});
         console.log(res);
+        if(res.data.success){
+          toast.success("Succesfully Registered");
+        }
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
       } else {
         const res = await axios.post(backendUrl + "/api/user/login", {formData});
         console.log(res);
+        if(res.data.success){
+          toast.success("Succesfully Logged In");
+        }
         setToken(res.data.token);
         localStorage.setItem("token", res.data.token);
       }
     } catch (error) {
+      toast.error(error.message);
       console.log(error);
     }
   };

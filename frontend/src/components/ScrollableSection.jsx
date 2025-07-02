@@ -54,7 +54,7 @@ const ScrollableSection = ({ title1, title2, data, CardComponent }) => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 scrollbar-hide px-10 py-4"
+        className="flex overflow-x-auto gap-6 scrollbar-hide px-0 sm:px-10 py-4"
       >
         {data.map((item, index) => (
           <CardComponent key={index} {...item} />

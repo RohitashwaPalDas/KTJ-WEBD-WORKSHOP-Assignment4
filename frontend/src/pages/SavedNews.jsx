@@ -36,8 +36,8 @@ const SavedNews = () => {
   }, []);
 
   return (
-    <div className="p-6 mt-10">
-      <Title text1="Saved" text2="News"/>
+    <div className="p-6 mt-16">
+      <div className="mb-4 sm:mb-0"><Title text1="Saved" text2="News"/></div>
       {savedNews.length === 0 ? (
         <p className="text-white/60">No articles saved yet.</p>
       ) : (

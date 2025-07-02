@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import {toast} from 'react-toastify'
 
 const Navbar = () => {
   const { token, setToken, searchQuery, setSearchQuery } = useContext(UserContext);
@@ -14,6 +15,7 @@ const Navbar = () => {
       setToken(null);
       localStorage.removeItem("token");
     }
+    toast.success("Logged Out");
     navigate("/login");
   };
 
@@ -21,20 +23,19 @@ const Navbar = () => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate("/news");
-      setMenuOpen(false); 
+      setMenuOpen(false);
     }
   };
 
   useEffect(() => {
-  const timeout = setTimeout(() => {
-    if (searchQuery.trim()) {
-      navigate("/news");
-    }
-  }, 400); 
+    const timeout = setTimeout(() => {
+      if (searchQuery.trim()) {
+        navigate("/news");
+      }
+    }, 400);
 
-  return () => clearTimeout(timeout);
-}, [searchQuery]);
-
+    return () => clearTimeout(timeout);
+  }, [searchQuery]);
 
   const navItems = [
     { label: "HOME", path: "/" },
@@ -45,7 +46,7 @@ const Navbar = () => {
 
   return (
     <div className="fixed top-0 w-full z-50 bg-[#111]/60 backdrop-blur-md border-b border-white/10 shadow-[0_5px_20px_-5px_rgba(255,255,255,0.1)]">
-      <div className="py-4 px-4 sm:px-6 md:px-8 flex justify-between items-center">
+      <div className="py-4 px-4 sm:px-6 md:px-8 flex justify-between items-center gap-4 flex-wrap">
         {/* Logo */}
         <div
           onClick={() => navigate("/")}
@@ -56,9 +57,34 @@ const Navbar = () => {
             src="https://img.icons8.com/fluency/48/news.png"
             alt="news"
           />
-          <h2 className="text-white text-xl sm:text-2xl font-bold tracking-wide">
+          <h2 className="text-white text-3xl sm:text-2xl font-bold tracking-wide">
             News<span className="text-red-500">Nectar</span>
           </h2>
+        </div>
+
+        {/* Mobile Search Bar */}
+        <form
+          onSubmit={handleSearch}
+          className="flex md:hidden items-center bg-white/10 border border-white/20 rounded-md overflow-hidden w-72"
+        >
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search news..."
+            className="bg-transparent text-white px-3 py-2 w-full outline-none placeholder:text-white/60 text-sm"
+          />
+          <button type="submit" className="px-3 text-red-500">
+            <FaSearch />
+          </button>
+        </form>
+
+        {/* Hamburger Toggle */}
+        <div
+          className="md:hidden text-white text-2xl cursor-pointer"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
         </div>
 
         {/* Desktop Search Bar */}
@@ -110,14 +136,6 @@ const Navbar = () => {
             {token ? "LOG OUT" : "LOG IN"}
           </button>
         </div>
-
-        {/* Mobile Toggle */}
-        <div
-          className="md:hidden text-white text-2xl cursor-pointer"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          {menuOpen ? <FaTimes /> : <FaBars />}
-        </div>
       </div>
 
       {/* Mobile Dropdown Menu */}
@@ -137,23 +155,6 @@ const Navbar = () => {
               {item.label}
             </div>
           ))}
-
-          {/* Mobile Search */}
-          <form
-            onSubmit={handleSearch}
-            className="flex items-center bg-white/10 border border-white/20 rounded-md overflow-hidden"
-          >
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search..."
-              className="bg-transparent text-white px-3 py-2 w-full outline-none placeholder:text-white/60"
-            />
-            <button type="submit" className="px-4 text-red-500">
-              <FaSearch />
-            </button>
-          </form>
 
           <button
             onClick={() => {
